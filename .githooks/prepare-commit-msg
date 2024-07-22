@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# If the pre-commit script left us a version number,
+# prepend it to the commit message
+
+version=$(cat .an-version)
+
+if [[ $version != '' ]]; then
+	echo "v${version}: $(cat $1)" > $1
+fi

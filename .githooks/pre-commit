@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Updates plugin/theme version number when a Git commit is made
+
+# Which file the version number is in, relative path from the repo root
+fname="an-misc.php"
+
+# Find the right line
+version_line=$(grep -m 1 'Version:' ${fname})
+
+if [[ $version_line == '' ]]; then
+	echo 'pre-commit error: file with version number not found'
+	exit 0
+	# Change to 'exit 1' if the commit should fail here
+fi
+
+# break down the version number into its components
+regex='(Version:[[:space:]]*)([[:digit:]]+)\.([[:digit:]]+)'
+if [[ $version_line =~ $regex ]]; then
+	version_prefix="${BASH_REMATCH[1]}"
+	major="${BASH_REMATCH[2]}"
+	minor="${BASH_REMATCH[3]}"
+else
+	echo 'pre-commit error: could not parse version number'
+	exit 0
+fi
+
+
+old_version="${major}.${minor}"
+
+# Increment the minor version
+minor=$((minor + 1))
+
+new_version="${major}.${minor}"
+
+# Update the file which contains the version number
+sed -i.sed-bak "s/${version_prefix}${old_version}/${version_prefix}${new_version}/" ${fname}
+
+
+# Add the updated file to the current commit
+git add ${fname}
+
+# Save the version number in a file, as we have another script that adds it to the commit message
+echo "${new_version}" > .an-version
+# Add the version file to the commit, too
+git add .an-version
+
+# Get the theme/plugin name, just used in our output message
+# $name is a fall-back value in case we can't find the theme/plugin name for some reason.
+# Also used as part of the grep/regex below, which extracts the actual theme/plugin name from the CSS/PHP file
+if [[ $fname == *.php ]]; then
+	name="Plugin"
+elif [[ $fname == *.css ]]; then
+	name="Theme"
+else
+	# No idea what we're updating here, it doesn't seem to be a WP theme OR a plugin!
+	name=''
+	echo "Version updated from ${old_version} to ${new_version}"
+fi
+
+if [[ $name != '' ]]; then
+
+	line=$(grep -m 1 "${name} Name:" ${fname})
+
+	if [[ $line != '' ]]; then
+		regex="(${name} Name:[[:space:]]*)(.+)"
+		if [[ $line =~ $regex ]]; then
+			name="${BASH_REMATCH[2]}" # Replace "Plugin" or "Theme" with the actual name
+		fi
+	fi
+
+	echo "${name} version updated from ${old_version} to ${new_version}"
+
+fi
+
+exit 0
+#Success!
