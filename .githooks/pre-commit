@@ -3,7 +3,7 @@
 # Updates plugin/theme version number when a Git commit is made
 
 # Which file the version number is in, relative path from the repo root
-fname="an-misc.php"
+fname="an-admin-notice.php"
 
 # Find the right line
 version_line=$(grep -m 1 'Version:' ${fname})
