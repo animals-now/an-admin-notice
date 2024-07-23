@@ -3,7 +3,7 @@
 	Plugin Name: AN Admin Notice
 	Plugin URI: https://github.com/animals-now/an-admin-notice
 	Description: Displays a custom notice to all users in the admin area.
-	Version: 1.4
+	Version: 1.5
 	Author: Adam Walter, Oded Streigold
 	Text Domain: admin-notice
 */
