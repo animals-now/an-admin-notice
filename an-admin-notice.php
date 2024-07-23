@@ -1,11 +1,9 @@
 <?php
 /*
-	Plugin Name: Admin Notice
+	Plugin Name: AN Admin Notice
 	Plugin URI: https://github.com/animals-now/an-admin-notice
 	Description: Displays a custom notice to all users in the admin area.
-	Version: 1.3
-	Requires at least: 5.4.1
-	Requires PHP: 7.0
+	Version: 1.4
 	Author: Adam Walter, Oded Streigold
 	Text Domain: admin-notice
 */
@@ -14,7 +12,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-class AGW_Admin_Notice {
+class AN_Admin_Notice {
 
 	/**
 	 * The notice message.
@@ -350,4 +348,4 @@ class AGW_Admin_Notice {
 	}
 }
 
-new AGW_Admin_Notice();
+new AN_Admin_Notice();
